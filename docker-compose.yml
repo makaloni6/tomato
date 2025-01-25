@@ -1,0 +1,21 @@
+services:
+  backend:
+    build:
+      context: ./backend_Project
+      dockerfile: docker/python/Dockerfile
+    volumes:
+      - ./backend_Project/backend:/backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+    ports:
+      - "8080:8080"
+    tty: true
+  
+  frontend:
+    build:
+      context: ./frontend_Project
+      dockerfile: docker/node/Dockerfile
+    volumes:
+      - ./frontend_Project/node/frontend:/usr/src/app/frontend
+    command: sh -c "cd /usr/src/app/frontend && yarn dev"
+    ports:
+      - "5173:5173"

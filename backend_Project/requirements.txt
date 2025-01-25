@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+websockets
+mysqlclient==2.2.4
