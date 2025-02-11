@@ -1,3 +1,4 @@
+import { Play, Pause, RotateCcw } from "lucide-react";
 import React, { useState, useEffect, useRef } from 'react';
 import {SettingModal, TaskModal} from '@/components/Modal';
 import axios from 'axios';
@@ -7,32 +8,34 @@ import {TimerDisplay} from '@/components/TimerDisplay';
 import {TimerHeader} from '@/components/TimerDisplay';
 
 interface TimerProps {
+    timer: number;
+    setTimer: (timer: number) => void;
+
+    restTimer: number;
+    setRestTimer: (restTimer: number) => void;
+
     isRunning: boolean; // isRunningを受け取る
     setIsRunning: (isRunning: boolean) => void; // setIsRunningも受け取る
   }
 
 // function Timer(isRunning: boolean, setIsRunning: (isRunning: boolean) => void){
-function Timer({isRunning, setIsRunning}: TimerProps){
-    const test_time = 5
-    const test_rest_time = 3
+function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunning}: TimerProps){
+
     const today = new Date();
-    const [timer, setTimer] = useState(test_time);
-    const [restTimer, setRestTimer] = useState(test_rest_time);
     const [user, setUser] = useState('test_user');
     const [data, setData] = useState('');
     const [isRest, setIsRest] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
-
-    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [isTaskOpen, setIsTaskOpen] = useState(false);
-    const modalOpen = () => {
-        setIsSettingsOpen(!isSettingsOpen);
-    };
-    const modalTaskOpen = () => {
-        setIsTaskOpen(!isTaskOpen);
-    };
+    let user_id = '1'
 
     const start = ()=>{
+        
+        axios.get(`http://localhost:8080/timer/1`)
+        .then(response => {
+            setTimer(response.data.work_time);
+            setRestTimer(response.data.rest_time);
+            setUser(response.data.user);
+        })
         setIsRunning(true);
     }
     const stop = ()=>{
@@ -40,10 +43,15 @@ function Timer({isRunning, setIsRunning}: TimerProps){
         setIsRest(false);
     }
     const reset = ()=>{
-        setIsRunning(false)
-        setIsRest(false)
-        setTimer(5)
-        setRestTimer(7)
+        setIsRunning(false);
+        setIsRest(false);
+        axios.get(`http://localhost:8080/timer/1`)
+        .then(response => {
+            setTimer(response.data.work_time);
+            setRestTimer(response.data.rest_time);
+            setUser(response.data.user);
+            setIsRunning(response.data.isRunning);
+        })
     }
 
     const formatTime = (time: number) => {
@@ -59,8 +67,9 @@ function Timer({isRunning, setIsRunning}: TimerProps){
     })
     .split("/")
     .join("-");
+
     useEffect(() => {
-        axios.get('http://localhost:8080/timer')
+        axios.get('http://localhost:8080/timer/1')
         .then(response => {
             setTimer(response.data.time);
             setUser(response.data.user);
@@ -108,22 +117,42 @@ function Timer({isRunning, setIsRunning}: TimerProps){
         return () => clearInterval(interval);
     }, [isRest, restTimer])
 
-   
     return (
-        <div className={`timer-base ${isRunning ? 'bg-red-500' : 'bg-blue-500'}`}>
-            <div id="date" className='relative top-0 left-0'>{formattedDate}</div>
-            <button onClick={modalOpen}>セッティング</button>
-            <SettingModal isOpen={isSettingsOpen} onClose={modalOpen}></SettingModal>
-            <button onClick={modalTaskOpen}>タスク履歴</button>
-            <TaskModal isOpen={isTaskOpen} onClose={modalTaskOpen}></TaskModal>
-            <h2>ポモドーロタイマー</h2>
+        <div className={`timer-base ${isRunning ? 'working' : 'resting'}`}>
+            <div className='timer-section'>
 
-            <p>仕事中{isRunning ? 'True' : 'False'}</p>
-            <p>休憩中{isRest ? 'True' : 'False'}</p>
-            {isRunning ? <p>仕事中タイマー：{formatTime(timer)}</p> : <p>休憩中タイマー：{formatTime(restTimer)}</p>}
-            <Button onClick={start}>開始</Button>
-            <Button onClick={stop}>停止</Button>
-            <Button onClick={reset}>リセット</Button>
+                <div id="date" className='relative text-3xl top-0 left-0 text-white-500'>{formattedDate}</div>
+                
+
+                {isRunning ? (
+                    <div className="timer-counter text-9xl font-bold tracking-wider mb-8 min-w-100">
+                        {formatTime(timer)}
+                        <div className="text-white-500 text-2xl">
+                            Keep up the good work! 
+                        </div>
+                    </div>
+                ) : (
+                <div className="timer-counter text-9xl font-bold tracking-wider mb-8 min-w-100">
+                        {formatTime(restTimer)}
+                        <div className="text-white-500 text-2xl">
+                            You did it!
+                        </div>
+                    </div>
+                )}
+
+                <Button onClick={start} size="icon">
+                    <Play className="h-4 w-4" />
+                </Button>
+                <Button onClick={stop} size="icon">
+                    <Pause className="h-4 w-4" />
+                </Button>
+                <Button onClick={reset} size="icon">
+                    <RotateCcw className="h-4 w-4" />
+                </Button>
+            </div>
+            <div className='task-section'>
+                <div className='task-title'>ここにはタスクを入れる</div>
+            </div>
 
         </div>
     );

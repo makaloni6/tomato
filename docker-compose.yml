@@ -9,7 +9,20 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  
+
+  db:
+    build:
+      context: ./db_Project
+      dockerfile: postgres/Dockerfile
+    volumes:
+      - ./db_Project/postgres:/db
+    ports:
+      - "5432:5432"
+    tty: true
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+
   frontend:
     build:
       context: ./frontend_Project

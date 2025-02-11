@@ -135,21 +135,43 @@ button:focus-visible {
 }
 
 
-.App {
-  flex: 1;
-  position: relative;
-  /* width: 100vw;
-  height: 100vh; */
-  overflow-y: auto;
+.app-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
-.timer-base {
-  position: fixed;
-  top: 50vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-  
+.header-base {
+  z-index: 1;
 }
+
+.working {
+  background-color: #eb4c4c;
+}
+
+.resting {
+  background-color: #76b7fb;
+}
+
+.timer-wrapper {
+  flex: 1;  /* headerの下の残りの空間全てを占める */
+  position: relative;
+  z-index: 0;
+
+}
+
+
+
+.timer-base {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+}
+
 
 .overlay {
   position: fixed;
@@ -157,20 +179,23 @@ button:focus-visible {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6); /* 半透明の黒色 */
+  /* background-color: rgba(0, 0, 0, 0.6); 半透明の黒色 */
   z-index: 999; /* モーダルウィンドウよりも前面に表示 */
 }
 
 .modal {
+  
   position: fixed;
   top: 50vh;
   left: 50vw;
   transform: translate(-50%, -50%);
-  background-color: white;
   min-width: 300px;
   min-height: 300px;
   padding: 20px;
   border: 1px solid #ccc;
+  border-radius: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
   z-index: 1000; 
 }
@@ -190,3 +215,28 @@ button:focus-visible {
     height: auto;
   }
 }
+
+.timer-counter {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.setting-content {
+  padding: 10px;
+  text-align: left;
+}
+
+
+.timer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.task-section {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #597170;
+} 
+

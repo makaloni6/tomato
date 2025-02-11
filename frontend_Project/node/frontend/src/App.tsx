@@ -7,13 +7,19 @@ import './App.css';
 
 function App() {
   const [isRunning, setIsRunning] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [restTimer, setRestTimer] = useState(0);
   return (
-    <div>
-      <Header isRunning={isRunning}/>
-      <div className='App'>
-        <Timer isRunning={isRunning} setIsRunning={setIsRunning} />
+    <>
+      <div className="app-container">
+
+        <Header timer={timer} setTimer={setTimer} restTimer={restTimer} setRestTimer={setRestTimer} isRunning={isRunning}/>
+        <div className={`timer-wrapper ${isRunning ? 'working' : 'resting'}`}>
+          <Timer timer={timer} setTimer={setTimer} restTimer={restTimer} setRestTimer={setRestTimer} isRunning={isRunning} setIsRunning={setIsRunning} />
+        </div>
+          
       </div>
-    </div>
+    </>
   );
 }
 
