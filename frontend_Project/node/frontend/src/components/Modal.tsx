@@ -66,7 +66,7 @@ function SettingModal({isOpen, onClose, timer, setTimer, restTimer, setRestTimer
                             max="60"
                             defaultValue={timer / 60}
                             onChange={e => setTimer(Number(e.target.value) * 60)}
-                            className="w-20 px-2 py-1 border rounded bg-gray-100 text-black" 
+                            className="w-20 px-2 py-1 border rounded bg-gray-100 " 
                         />
                     </div>
                     <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ function SettingModal({isOpen, onClose, timer, setTimer, restTimer, setRestTimer
                             max="60"
                             defaultValue={restTimer/ 60}
                             onChange={e => setRestTimer(Number(e.target.value) * 60)}
-                            className="w-20 px-2 py-1 border rounded bg-gray-100 text-black" 
+                            className="w-20 px-2 py-1 border rounded bg-gray-100 " 
                         />
                     </div>
                 </div>

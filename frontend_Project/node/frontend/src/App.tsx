@@ -14,7 +14,7 @@ function App() {
       <div className="app-container">
 
         <Header timer={timer} setTimer={setTimer} restTimer={restTimer} setRestTimer={setRestTimer} isRunning={isRunning}/>
-        <div className={`timer-wrapper ${isRunning ? 'working' : 'resting'}`}>
+        <div className={`timer-wrapper ${isRunning ? 'working' : 'resting'} flex-1 min-h-screen` }>
           <Timer timer={timer} setTimer={setTimer} restTimer={restTimer} setRestTimer={setRestTimer} isRunning={isRunning} setIsRunning={setIsRunning} />
         </div>
           

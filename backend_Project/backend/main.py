@@ -27,3 +27,4 @@ def main():
 # 開発環境での実行
 if __name__ == "__main__":
     main()
+

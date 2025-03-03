@@ -20,7 +20,8 @@ services:
       - "5432:5432"
     tty: true
     environment:
-
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
 
   frontend:
     build:

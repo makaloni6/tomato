@@ -140,6 +140,11 @@ button:focus-visible {
   min-width: 100vw;
   display: flex;
   flex-direction: column;
+.app-container {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
 .header-base {
@@ -163,10 +168,39 @@ button:focus-visible {
 
 
 
+.header-base {
 .timer-base {
   display: grid;
   grid-template-columns: 4fr 1fr;
   position: fixed;
+
+}
+
+.working {
+  background-color: #eb4c4c;
+}
+
+.resting {
+  background-color: #76b7fb;
+}
+
+.timer-wrapper {
+  flex: 1;  /* headerの下の残りの空間全てを占める */
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  /* z-index: 1; */
+
+}
+
+
+
+.timer-base {
+  flex: 1;
+  display: grid;
+  flex-direction: row;
+  justify-content: center;
+  grid-template-columns: 3fr 1fr
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); 
@@ -240,3 +274,46 @@ button:focus-visible {
   background-color: #597170;
 } 
 
+
+.timer-counter {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff9f9;
+}
+
+.setting-content {
+  padding: 10px;
+  text-align: left;
+}
+
+
+.timer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.task-section {
+  display: flex;
+}
+
+.task-title {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #bfb4b4;
+  background-color: transparent;
+  color: #bfb4b4;
+}
+
+.finished-task-section {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  
+  padding: 1rem;
+  padding-bottom: 20%;
+  color: #fff9f9;
+  background-color: rgba(0, 0, 0, 0.03);
+
+} 

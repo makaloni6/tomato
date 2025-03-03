@@ -1,4 +1,4 @@
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, Check } from "lucide-react";
 import React, { useState, useEffect, useRef } from 'react';
 import {SettingModal, TaskModal} from '@/components/Modal';
 import axios from 'axios';
@@ -18,6 +18,11 @@ interface TimerProps {
     setIsRunning: (isRunning: boolean) => void; // setIsRunningも受け取る
   }
 
+interface TasklistProps {
+    name: string;
+    spendTime: string;
+}
+
 // function Timer(isRunning: boolean, setIsRunning: (isRunning: boolean) => void){
 function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunning}: TimerProps){
 
@@ -25,8 +30,15 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
     const [user, setUser] = useState('test_user');
     const [data, setData] = useState('');
     const [isRest, setIsRest] = useState(false);
+    const [taskName, setTaskName] = useState('');
     const audioRef = useRef<HTMLAudioElement>(null);
+    const [tasklist, setTasklist] = useState<TasklistProps[]>([]);
+  
+    const [workTime, setWorkTime] = useState(0);
+    const [restTime, setRestTime] = useState(0);
+
     let user_id = '1'
+    
 
     const start = ()=>{
         
@@ -35,6 +47,9 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
             setTimer(response.data.work_time);
             setRestTimer(response.data.rest_time);
             setUser(response.data.user);
+            setWorkTime(response.data.work_time);
+            setRestTime(response.data.rest_time);
+            console.log(workTime);
         })
         setIsRunning(true);
     }
@@ -68,6 +83,24 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
     .split("/")
     .join("-");
 
+    const finishTask = () => {
+        console.log(workTime);
+        const spendTime = formatTime(workTime - timer);
+        setIsRunning(false);
+        setIsRest(true);
+        
+        tasklist.push({name: taskName, spendTime: spendTime});
+    }
+
+    const taskmapping = () => {
+        
+        
+        return tasklist.map((task, index) => (
+            <p key={index} className='finished-task-title'>{task.name.length > 20 ? task.name.slice(0, 20) : task.name} {task.spendTime}</p>
+        ));
+    }
+
+    // 初期値設定
     useEffect(() => {
         axios.get('http://localhost:8080/timer/1')
         .then(response => {
@@ -80,6 +113,7 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
         });
     }, []);
 
+    
     useEffect(() => {
         if (isRunning == false){
             return
@@ -117,6 +151,11 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
         return () => clearInterval(interval);
     }, [isRest, restTimer])
 
+    useEffect(() => {
+        setTaskName(taskName);
+    }, [taskName]);
+
+
     return (
         <div className={`timer-base ${isRunning ? 'working' : 'resting'}`}>
             <div className='timer-section'>
@@ -125,14 +164,14 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
                 
 
                 {isRunning ? (
-                    <div className="timer-counter text-9xl font-bold tracking-wider mb-8 min-w-100">
+                    <div className="timer-counter text-9xl font-bold tracking-wider mb-4 min-w-100">
                         {formatTime(timer)}
                         <div className="text-white-500 text-2xl">
                             Keep up the good work! 
                         </div>
                     </div>
                 ) : (
-                <div className="timer-counter text-9xl font-bold tracking-wider mb-8 min-w-100">
+                <div className="timer-counter text-9xl font-bold tracking-wider mb-4 min-w-100 color">
                         {formatTime(restTimer)}
                         <div className="text-white-500 text-2xl">
                             You did it!
@@ -140,19 +179,37 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
                     </div>
                 )}
 
-                <Button onClick={start} size="icon">
-                    <Play className="h-4 w-4" />
-                </Button>
-                <Button onClick={stop} size="icon">
-                    <Pause className="h-4 w-4" />
-                </Button>
-                <Button onClick={reset} size="icon">
-                    <RotateCcw className="h-4 w-4" />
-                </Button>
+                <div className='task-section mb-4'>
+                    <input 
+                        type="text" 
+                        className='task-title' 
+                        placeholder='Your task' 
+                        color='#413535' 
+                        value={taskName}
+                        onChange={(e) => setTaskName(e.target.value)}
+                    />
+                </div>
+
+                <div className='button-section'>
+                    <Button onClick={start} size="icon">
+                        <Play className="h-4 w-4" />
+                    </Button>
+                    <Button onClick={stop} size="icon">
+                        <Pause className="h-4 w-4" />
+                    </Button>
+                    <Button onClick={reset} size="icon">
+                        <RotateCcw className="h-4 w-4" />
+                        </Button>
+                </div>
+                <button className='task-finished-button' onClick={finishTask}>
+                    強制完了ボタン
+                </button>
             </div>
-            <div className='task-section'>
-                <div className='task-title'>ここにはタスクを入れる</div>
+            <div className='finished-task-section'>
+
+                {taskmapping()}
             </div>
+
 
         </div>
     );
