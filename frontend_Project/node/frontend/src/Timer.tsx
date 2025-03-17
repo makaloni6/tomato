@@ -42,20 +42,25 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
 
     const start = ()=>{
         
-        axios.get(`http://localhost:8080/timer/1`)
-        .then(response => {
-            setTimer(response.data.work_time);
-            setRestTimer(response.data.rest_time);
-            setUser(response.data.user);
-            setWorkTime(response.data.work_time);
-            setRestTime(response.data.rest_time);
-            console.log(workTime);
-        })
-        setIsRunning(true);
+        // axios.get(`http://localhost:8080/timer/1`)
+        // .then(response => {
+        //     setTimer(response.data.work_time);
+        //     setRestTimer(response.data.rest_time);
+        //     setUser(response.data.user);
+        //     setWorkTime(response.data.work_time);
+        //     setRestTime(response.data.rest_time);
+        //     console.log(workTime);
+        // })
+        if (isRunning == false){
+            setIsRunning(true);
+        }
+        else if (isRunning == true){
+            setIsRunning(false);
+        }
     }
     const stop = ()=>{
         setIsRunning(false);
-        setIsRest(false);
+        setIsRest(true);
     }
     const reset = ()=>{
         setIsRunning(false);
@@ -135,6 +140,18 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
     }, [isRunning, timer])
 
     useEffect(() => {
+        axios.get(`http://localhost:8080/timer/1`)
+        .then(response => {
+            setTimer(response.data.work_time);
+            setRestTimer(response.data.rest_time);
+            setUser(response.data.user);
+            setWorkTime(response.data.work_time);
+            setRestTime(response.data.rest_time);
+            console.log(workTime);
+        })
+    }, [isRunning])
+        
+    useEffect(() => {
 
         if (isRest == false){
             return
@@ -199,7 +216,11 @@ function Timer({timer, setTimer, restTimer, setRestTimer, isRunning, setIsRunnin
                     </Button>
                     <Button onClick={reset} size="icon">
                         <RotateCcw className="h-4 w-4" />
-                        </Button>
+                    </Button>
+                </div>
+                <div className='status-check'>
+                    <p>isRunning: {isRunning ? 'true' : 'false'}</p>
+                    <p>isRest: {isRest ? 'true' : 'false'}</p>
                 </div>
                 <button className='task-finished-button' onClick={finishTask}>
                     強制完了ボタン

@@ -134,12 +134,6 @@ button:focus-visible {
   }
 }
 
-
-.app-container {
-  min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
-  flex-direction: column;
 .app-container {
   min-height: 100vh;
   min-width: 100vw;
@@ -150,6 +144,10 @@ button:focus-visible {
 .header-base {
   z-index: 1;
 }
+
+/* .header-button { 
+  min-width: 100px;
+} */
 
 .working {
   background-color: #eb4c4c;
@@ -169,6 +167,7 @@ button:focus-visible {
 
 
 .header-base {
+}
 .timer-base {
   display: grid;
   grid-template-columns: 4fr 1fr;
@@ -200,7 +199,7 @@ button:focus-visible {
   display: grid;
   flex-direction: row;
   justify-content: center;
-  grid-template-columns: 3fr 1fr
+  grid-template-columns: 3fr 1fr;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); 

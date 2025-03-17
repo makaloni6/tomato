@@ -23,7 +23,7 @@ function Header({isRunning, timer, setTimer, restTimer, setRestTimer}: HeaderPro
         <div className={`header-base top-0 left-0 right-0 flex justify-between px-8  ${isRunning ? 'working' : 'resting'} h-16 items-center drop-shadow-2xl border-b border-gray-300 shadow-md  `}>
             <h1 className="font-bold text-2xl">Tomato</h1>
             <div className="flex gap-3">
-                <Button variant="outline" onClick={modalOpen}>設定</Button>
+                <Button className='header-button' variant="outline" onClick={modalOpen}>Setting</Button>
                 <SettingModal isOpen={isSettingsOpen} onClose={modalOpen} timer={timer} setTimer={setTimer} restTimer={restTimer} setRestTimer={setRestTimer}></SettingModal>
                 {/* <Button onClick={modalTaskOpen}>タスク履歴</Button>
                 <TaskModal isOpen={isTaskOpen} onClose={modalTaskOpen}></TaskModal> */}
